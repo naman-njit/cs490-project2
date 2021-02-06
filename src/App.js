@@ -1,7 +1,18 @@
+import { useState, useEffect } from "react";
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const [test, setTest] = useState('loading...');
+  
+  useEffect(() => {
+    fetch('/api/test/hello').then((res) => {
+      res.json().then((data) => {
+        setTest(data.test);
+      })
+    })
+  }, []);
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -17,6 +28,7 @@ function App() {
         >
           Learn React
         </a>
+        <div>Api test: {test}</div>
       </header>
     </div>
   );
