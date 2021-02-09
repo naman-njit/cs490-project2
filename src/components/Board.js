@@ -8,6 +8,8 @@ function Board() {
 
   const currentCellValue = currentTurn % 2 === 0 ? 'O' : 'X';
 
+  const isGameComplete = board.some(cell => cell == null);
+
   const clickCell = useCallback((index) => {
     if (board[index] == null) {
       const boardCopy = board.slice();
@@ -19,6 +21,10 @@ function Board() {
 
   return (
     <div className="board">
+      {isGameComplete ?
+        <h2>Next Player: {currentCellValue}</h2> : 
+        <h2>Game complete!</h2>
+      }
       {board.map((value, i) => {
         return <>
           <Cell index={i} value={value} onClick={() => clickCell(i)} />
