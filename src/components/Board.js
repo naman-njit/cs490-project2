@@ -2,6 +2,8 @@ import React, { useState, useCallback } from 'react';
 
 import Cell from './Cell';
 
+import './Board.css';
+
 function calculateWinner(squares) {
   const lines = [
     [0, 1, 2],
@@ -43,19 +45,20 @@ function Board() {
   }, [board, setBoard]);
 
   return (
-    <div className="board">
+    <div>
       {gameHasWinner ?
         <h2>Game complete - Winner is {winner}!</h2>
        : isBoardFull ?
             <h2>Game complete - Tie</h2> :
             <h2>Next Player: {currentCellValue}</h2>
       }
-      {board.map((value, i) => {
-        return <>
-          <Cell index={i} value={value} onClick={() => clickCell(i)} />
-          {(i % 3) == 2 ? <div /> : null}
-        </>
-      })}
+      <div className="board">
+        {board.map((value, i) => {
+          return <>
+            <Cell index={i} value={value} onClick={() => clickCell(i)} />
+          </>
+        })}
+      </div>
     </div>
   );
 }
