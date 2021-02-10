@@ -1,3 +1,4 @@
+
 # Flask and create-react-app
 
 ## Requirements
@@ -5,8 +6,9 @@
 2. `pip install -r requirements.txt`
 
 ## Setup
-1. Create `.env.development.local` in the directory
-2. Put `DANGEROUSLY_DISABLE_HOST_CHECK=true` in `.env.development.local`
+ 1. Create `.env.development.local` in the directory
+ 2. Put `DANGEROUSLY_DISABLE_HOST_CHECK=true` in `.env.development.local`
+    -  You can run `echo "DANGEROUSLY_DISABLE_HOST_CHECK=true" > .env.development.local` to do this
 
 ## Run Application
 1. Run command in terminal `flask run --port 8081`

@@ -18,7 +18,7 @@ socketio = SocketIO(
 @app.route("/<path:filename>")
 def index(filename):
     print(filename)
-    return send_from_directory('./build', filename)
+    return send_from_directory("./build", filename)
 
 
 @app.route("/api/login/<username>")
@@ -35,13 +35,20 @@ def on_connect():
 
 @socketio.on("click")
 def on_click(pos):
+
     socketio.emit("click",  pos, broadcast=True, include_self=False)
     return pos
 
+host = os.getenv("IP", "0.0.0.0")
+if os.getenv("C9_PORT"):
+    port = 8081
+else:
+    port = int(os.getenv("PORT", "8081"))
 
 socketio.run(
     app,
     host=os.getenv("IP", "0.0.0.0"),
-    port=int(os.getenv("PORT", 8081)),
+    port=port,
     debug=True
 )
+    
