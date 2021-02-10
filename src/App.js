@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 import Board from './components/Board';
+import Leaderboard from './components/Leaderboard';
 
 function App() {
   const [test, setTest] = useState('loading...');
@@ -16,6 +17,7 @@ function App() {
   return (
     <div className="App">
       <Board />
+      <Leaderboard />
     </div>
   );
 }
