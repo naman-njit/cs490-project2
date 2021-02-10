@@ -4,19 +4,19 @@ import Board from './components/Board';
 import Leaderboard from './components/Leaderboard';
 
 function App() {
-  const [test, setTest] = useState('loading...');
+  const [username, setUsername] = useState(null);
 
   useEffect(() => {
-    fetch('/api/test/hello').then((res) => {
+    fetch('/api/login/hello').then((res) => {
       res.json().then((data) => {
-        setTest(data.test);
+        setUsername(data.username);
       })
     })
   }, []);
 
   return (
     <div className="App">
-      <Board />
+      {username ? <Board /> : <div>loading...</div>}
       <Leaderboard />
     </div>
   );

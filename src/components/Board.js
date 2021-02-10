@@ -1,8 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
 
 import Cell from './Cell';
 
 import './Board.css';
+
+const socket = io();
 
 function calculateWinner(squares) {
   const lines = [
@@ -35,14 +38,33 @@ function Board() {
   const winner = calculateWinner(board);
   const gameHasWinner = winner != null;
 
-  const clickCell = useCallback((index) => {
+  const clickCell = (index, isSocket) => {
     if (board[index] == null && !gameHasWinner && !isBoardFull) {
-      const boardCopy = board.slice();
-      boardCopy[index] = currentCellValue;
-      setBoard(boardCopy);
+      setBoard((prevBoard) =>  {
+        const boardCopy = prevBoard.slice();
+        boardCopy[index] = currentCellValue;
+        return boardCopy;
+      });
       setCurrentTurn(prevTurn => prevTurn + 1);
+      if (!isSocket) {
+        socket.emit('click', index);
+      }
     }
-  }, [board, setBoard]);
+  };
+
+  useEffect(() => {
+    socket.on('connect', (data) => {
+      console.log(data);
+    });
+
+    socket.on('click', (index) => {
+      clickCell(index, true);
+    });
+
+    return () => {
+      socket.off();
+    }
+  });
 
   return (
     <div>
@@ -54,9 +76,7 @@ function Board() {
       }
       <div className="board">
         {board.map((value, i) => {
-          return <>
-            <Cell index={i} value={value} onClick={() => clickCell(i)} />
-          </>
+          return <Cell key={i} index={i} value={value} onClick={() => clickCell(i, false)} />
         })}
       </div>
     </div>
