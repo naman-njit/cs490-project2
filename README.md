@@ -11,7 +11,7 @@
     -  You can run `echo "DANGEROUSLY_DISABLE_HOST_CHECK=true" > .env.development.local` to do this
 
 ## Run Application
-1. Run command in terminal `flask run --port 8081`
+1. Run command in terminal `python app.py`
 2. Run command in another terminal `npm run start`
 3. Preview web page in browser '/'
 
