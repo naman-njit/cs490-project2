@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
 import './Leaderboard.css';
@@ -8,14 +8,12 @@ const socket = io();
 function Leaderboard(props) {
   const [rankings, setRankings] = useState([])
   
-  const getRanking = () => {
+  useEffect(() => {
     fetch('/api/leaderboard/list').then(
       (response) => {
         response.json().then((data) => setRankings(data.ranks));
       })
-  };
-  
-  getRanking();
+  }, []);
   
   return (
     <div>
