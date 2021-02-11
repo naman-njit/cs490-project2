@@ -1,6 +1,7 @@
 from flask import Blueprint, current_app, send_from_directory
 
 from .login import login_bp
+from .leaderboard import leaderboard_bp
 
 app_bp = Blueprint(
     "app_bp",

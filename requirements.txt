@@ -3,3 +3,4 @@ Flask-SocketIO
 Flask-Cors
 Flask-SQLAlchemy
 Flask-Migrate
+python-dotenv

@@ -1,8 +1,21 @@
 import React, {useState} from 'react';
+import io from 'socket.io-client';
+
 import './Leaderboard.css';
 
+const socket = io();
+
 function Leaderboard(props) {
-  const [rankings, setRankings] = useState([[1, "Naman", 100], [2, "Anshul", 99], [3, "Kris", 95], [4, "David", 5]])
+  const [rankings, setRankings] = useState([])
+  
+  const getRanking = () => {
+    fetch('/api/leaderboard/list').then(
+      (response) => {
+        response.json().then((data) => setRankings(data.ranks));
+      })
+  };
+  
+  getRanking();
   
   return (
     <div>
@@ -12,11 +25,11 @@ function Leaderboard(props) {
           <td className="tableTitle"><b> Name </b></td>
           <td className="tableTitle"><b> Score </b></td>
         </tr>
-        {rankings.map(rank =>
+        {rankings.map(entry =>
           <tr>
-            <td>{rank[0]}</td>
-            <td>{rank[1]}</td>
-            <td>{rank[2]}</td>
+            <td>{entry.rank}</td>
+            <td>{entry.name}</td>
+            <td>{entry.points}</td>
           </tr>
         )}
       </table> 

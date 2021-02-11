@@ -11,7 +11,6 @@ app = create_app(config)
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
-
 host = os.getenv("IP", "0.0.0.0")
 if os.getenv("C9_PORT"):
     port = 8081
