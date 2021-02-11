@@ -53,7 +53,7 @@ function Board() {
   };
   
   const restartGame = () => {
-    setBoard(Array(9).fill(null));
+    socket.emit('restart')
   }
 
   useEffect(() => {
@@ -64,6 +64,10 @@ function Board() {
     socket.on('click', (index) => {
       clickCell(index, true);
     });
+    
+    socket.on('again', (response) => {
+      setBoard(Array(9).fill(null));
+    })
 
     return () => {
       socket.off();

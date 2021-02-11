@@ -11,3 +11,7 @@ def register_sockets(socketio):
     def on_click(pos):
         socketio.emit("click",  pos, broadcast=True, include_self=False)
         return pos
+
+    @socketio.on("restart")
+    def restart():
+        socketio.emit("again")
