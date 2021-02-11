@@ -51,6 +51,10 @@ function Board() {
       }
     }
   };
+  
+  const restartGame = () => {
+    setBoard(Array(9).fill(null));
+  }
 
   useEffect(() => {
     socket.on('connect', (data) => {
@@ -69,10 +73,18 @@ function Board() {
   return (
     <div>
       {gameHasWinner ?
-        <h2>Game complete - Winner is {winner}!</h2>
+        <div>
+          <h2>Game complete - Winner is {winner}!</h2>
+          <button type="button" onClick={restartGame}> Restart </button>
+        </div>
        : isBoardFull ?
-            <h2>Game complete - Tie</h2> :
-            <h2>Next Player: {currentCellValue}</h2>
+          <div>
+            <h2>Game complete - Tie</h2>
+            <button type="button" onClick={restartGame}> Restart </button>
+          </div> 
+        :
+          <h2>Next Player: {currentCellValue}</h2>
+            
       }
       <div className="board">
         {board.map((value, i) => {
