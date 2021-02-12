@@ -2,23 +2,21 @@ import { useState, useEffect } from 'react';
 
 import Board from './components/Board';
 import Leaderboard from './components/Leaderboard';
-import GoogleButton from './components/GoogleButton';
+import Login from './components/Login';
 
 function App() {
   const [username, setUsername] = useState(null);
 
-  useEffect(() => {
-    fetch('/api/login/hello').then((res) => {
-      res.json().then((data) => {
-        setUsername(data.username);
-      });
-    });
-  }, []);
-
   return (
     <div className="App">
-      <GoogleButton />
-      {username ? <Board /> : <div>loading...</div>}
+      {username ? (
+        <Board username={username} />
+      ) : (
+        <div>
+          <div>Please log in to continue</div>
+          <Login setUsername={setUsername} />
+        </div>
+      )}
       <Leaderboard />
     </div>
   );

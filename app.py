@@ -2,7 +2,7 @@ import os
 from flask import session
 from flask_cors import CORS
 
-from server import create_app, socketio
+from server import create_app, socketio, migrate
 from config import Config
 
 
@@ -17,9 +17,10 @@ if os.getenv("C9_PORT"):
 else:
     port = int(os.getenv("PORT", "8081"))
 
-socketio.run(
-    app,
-    host=host,
-    port=port,
-    debug=True
-)
+if __name__ == "__main__":
+    socketio.run(
+        app,
+        host=host,
+        port=port,
+        debug=True
+    )

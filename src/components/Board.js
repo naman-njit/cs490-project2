@@ -27,7 +27,9 @@ function calculateWinner(squares) {
   return null;
 }
 
-function Board() {
+function Board(props) {
+  const { username } = props;
+
   const [board, setBoard] = useState(Array(9).fill(null));
   const [currentTurn, setCurrentTurn] = useState(1); // 1 to 9
 
@@ -76,6 +78,7 @@ function Board() {
 
   return (
     <div>
+      <h2>Username: {username}</h2>
       {gameHasWinner ? (
         <div>
           <h2>Game complete - Winner is {winner}!</h2>
