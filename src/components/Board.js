@@ -70,10 +70,6 @@ function Board(props) {
       setBoard(response.board.split('').map((char) => (char === ' ' ? null : char)));
     });
 
-    socket.on('again', (response) => {
-      setBoard(Array(9).fill(null));
-    });
-
     return () => {
       socket.off();
     };
@@ -88,10 +84,14 @@ function Board(props) {
       clickCell(index, true);
     });
 
+    socket.on('again', (response) => {
+      setBoard(Array(9).fill(null));
+    });
+
     return () => {
       socket.off();
     };
-  }, [clickCell]);
+  }, [board]);
 
   if (!gameData) {
     return <div>Loading</div>;
