@@ -2,7 +2,7 @@ import * as React from 'react';
 import { GoogleLogin } from 'react-google-login';
 
 export function Login(props) {
-  const { setUsername } = props;
+  const { setUser } = props;
 
   const responseGoogle = (response) => {
     fetch('/api/login/oauth', {
@@ -13,7 +13,7 @@ export function Login(props) {
     }).then((response) => {
       if (response.status === 200) {
         response.json().then((data) => {
-          setUsername(data.name);
+          setUser(data);
         });
       }
     });
@@ -25,6 +25,7 @@ export function Login(props) {
       buttonText="Login"
       onSuccess={responseGoogle}
       cookiePolicy="single_host_origin"
+      isSignedIn
     />
   );
 }

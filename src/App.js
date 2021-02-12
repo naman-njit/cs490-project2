@@ -5,16 +5,16 @@ import Leaderboard from './components/Leaderboard';
 import Login from './components/Login';
 
 function App() {
-  const [username, setUsername] = useState(null);
+  const [user, setUser] = useState(null);
 
   return (
     <div className="App">
-      {username ? (
-        <Board username={username} />
+      {user ? (
+        <Board user={user} />
       ) : (
         <div>
           <div>Please log in to continue</div>
-          <Login setUsername={setUsername} />
+          <Login setUser={setUser} />
         </div>
       )}
       <Leaderboard />
