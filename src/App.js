@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import Board from './components/Board';
 import Leaderboard from './components/Leaderboard';
+import GoogleButton from './components/GoogleButton';
 
 function App() {
   const [username, setUsername] = useState(null);
@@ -16,6 +17,7 @@ function App() {
 
   return (
     <div className="App">
+      <GoogleButton />
       {username ? <Board /> : <div>loading...</div>}
       <Leaderboard />
     </div>

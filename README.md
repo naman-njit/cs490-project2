@@ -33,6 +33,8 @@
 8. Get SQLAlchemy: `pip install Flask-SQLAlchemy==2.1`
 9. Make a new file called sql.env and add `SQL_USER=` and `SQL_PASSWORD=` in it
 
+## Setting up Google OAuth
+1. Run command in terminal `npm install react google-react-login`
 
 ## Deploy to Heroku
 1. Create a Heroku app: `heroku create --buildpack heroku/python`
