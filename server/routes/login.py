@@ -47,6 +47,6 @@ def oauth():
 
     return {
         "message": "Account already exists",
-        "user_id": query_user.id,
+        "id": query_user.id,
         "name": query_user.name,
     }

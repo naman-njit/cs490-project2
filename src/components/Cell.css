@@ -6,10 +6,10 @@
     width: 100px;
     height: 100px;
     border: 1px solid #00000000;
-    cursor: pointer;
 }
 
-.cell:hover {
+.highlight:hover {
+    cursor: pointer;
     background-color: yellow;
 }
 
