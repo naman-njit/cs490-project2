@@ -33,28 +33,28 @@ function Board() {
 
   const currentCellValue = currentTurn % 2 === 0 ? 'O' : 'X';
 
-  const isBoardFull = board.every(cell => cell != null);
+  const isBoardFull = board.every((cell) => cell != null);
 
   const winner = calculateWinner(board);
   const gameHasWinner = winner != null;
 
   const clickCell = (index, isSocket) => {
     if (board[index] == null && !gameHasWinner && !isBoardFull) {
-      setBoard((prevBoard) =>  {
+      setBoard((prevBoard) => {
         const boardCopy = prevBoard.slice();
         boardCopy[index] = currentCellValue;
         return boardCopy;
       });
-      setCurrentTurn(prevTurn => prevTurn + 1);
+      setCurrentTurn((prevTurn) => prevTurn + 1);
       if (!isSocket) {
         socket.emit('click', index);
       }
     }
   };
-  
+
   const restartGame = () => {
-    socket.emit('restart')
-  }
+    socket.emit('restart');
+  };
 
   useEffect(() => {
     socket.on('connect', (data) => {
@@ -64,35 +64,40 @@ function Board() {
     socket.on('click', (index) => {
       clickCell(index, true);
     });
-    
+
     socket.on('again', (response) => {
       setBoard(Array(9).fill(null));
-    })
+    });
 
     return () => {
       socket.off();
-    }
+    };
   });
 
   return (
     <div>
-      {gameHasWinner ?
+      {gameHasWinner ? (
         <div>
           <h2>Game complete - Winner is {winner}!</h2>
-          <button type="button" onClick={restartGame}> Restart </button>
+          <button type="button" onClick={restartGame}>
+            {' '}
+            Restart{' '}
+          </button>
         </div>
-       : isBoardFull ?
-          <div>
-            <h2>Game complete - Tie</h2>
-            <button type="button" onClick={restartGame}> Restart </button>
-          </div> 
-        :
-          <h2>Next Player: {currentCellValue}</h2>
-            
-      }
+      ) : isBoardFull ? (
+        <div>
+          <h2>Game complete - Tie</h2>
+          <button type="button" onClick={restartGame}>
+            {' '}
+            Restart{' '}
+          </button>
+        </div>
+      ) : (
+        <h2>Next Player: {currentCellValue}</h2>
+      )}
       <div className="board">
         {board.map((value, i) => {
-          return <Cell key={i} index={i} value={value} onClick={() => clickCell(i, false)} />
+          return <Cell key={i} index={i} value={value} onClick={() => clickCell(i, false)} />;
         })}
       </div>
     </div>

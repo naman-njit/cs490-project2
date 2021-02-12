@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 import Board from './components/Board';
 import Leaderboard from './components/Leaderboard';
@@ -11,8 +11,8 @@ function App() {
     fetch('/api/login/hello').then((res) => {
       res.json().then((data) => {
         setUsername(data.username);
-      })
-    })
+      });
+    });
   }, []);
 
   return (
