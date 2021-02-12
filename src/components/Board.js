@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import io from 'socket.io-client';
 
 import Cell from './Cell';
+import PlayerList from './PlayerList';
 
 import './Board.css';
 
@@ -28,9 +29,10 @@ function calculateWinner(squares) {
 }
 
 function Board(props) {
-  const { username } = props;
+  const { user } = props;
 
   const [board, setBoard] = useState(Array(9).fill(null));
+  const [gameData, setGameData] = useState(null);
   const [currentTurn, setCurrentTurn] = useState(1); // 1 to 9
 
   const currentCellValue = currentTurn % 2 === 0 ? 'O' : 'X';
@@ -40,19 +42,29 @@ function Board(props) {
   const winner = calculateWinner(board);
   const gameHasWinner = winner != null;
 
-  const clickCell = (index, isSocket) => {
-    if (board[index] == null && !gameHasWinner && !isBoardFull) {
+  const currentPlayer = currentTurn % 2 === 0 ? gameData?.player_o : gameData?.player_x;
+  const playable = user?.id === currentPlayer?.id && !gameHasWinner && !isBoardFull;
+
+  const clickCell = useCallback((index) => {
+    socket.emit('click', index);
+    console.log('Clicked and emitted');
+  }, []);
+
+  const onClick = useCallback(
+    (index) => {
+      console.log('click', index, currentCellValue, currentTurn);
       setBoard((prevBoard) => {
         const boardCopy = prevBoard.slice();
         boardCopy[index] = currentCellValue;
         return boardCopy;
       });
-      setCurrentTurn((prevTurn) => prevTurn + 1);
-      if (!isSocket) {
-        socket.emit('click', index);
-      }
-    }
-  };
+      setCurrentTurn((prevTurn) => {
+        console.log('prev', prevTurn);
+        return prevTurn + 1;
+      });
+    },
+    [currentCellValue, currentTurn, board, gameHasWinner, isBoardFull],
+  );
 
   const restartGame = () => {
     socket.emit('restart');
@@ -63,22 +75,40 @@ function Board(props) {
       console.log(data);
     });
 
-    socket.on('click', (index) => {
-      clickCell(index, true);
+    socket.on('again', () => {
+      setBoard(Array(9).fill(null));
     });
 
-    socket.on('again', (response) => {
-      setBoard(Array(9).fill(null));
+    socket.on('click', (index) => onClick(index));
+
+    socket.emit('load', (response) => {
+      console.log(response);
+      setGameData(response);
+    });
+
+    socket.on('join', (response) => {
+      console.log(response);
+      setGameData((prevData) => {
+        return {
+          ...prevData,
+          [response.is_player_x ? 'player_x' : 'player_o']: response.player,
+        };
+      });
     });
 
     return () => {
       socket.off();
     };
-  });
+  }, []);
+
+  if (!gameData) {
+    return <div>Loading</div>;
+  }
 
   return (
     <div>
-      <h2>Username: {username}</h2>
+      <h2>Username: {user.name}</h2>
+      <PlayerList gameData={gameData} />
       {gameHasWinner ? (
         <div>
           <h2>Game complete - Winner is {winner}!</h2>
@@ -96,11 +126,21 @@ function Board(props) {
           </button>
         </div>
       ) : (
-        <h2>Next Player: {currentCellValue}</h2>
+        <h2>
+          Next Player: {currentCellValue} {currentTurn}
+        </h2>
       )}
       <div className="board">
         {board.map((value, i) => {
-          return <Cell key={i} index={i} value={value} onClick={() => clickCell(i, false)} />;
+          return (
+            <Cell
+              key={i}
+              index={i}
+              value={value}
+              onClick={() => clickCell(i)}
+              playable={playable}
+            />
+          );
         })}
       </div>
     </div>
